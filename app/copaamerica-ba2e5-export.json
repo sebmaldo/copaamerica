@@ -1,0 +1,154 @@
+{
+  "paises" : [ {
+    "api_id" : 1443,
+    "bandera" : "🇦🇷",
+    "codigo" : "ARG",
+    "nombre" : "Argentina"
+  }, {
+    "api_id" : 1728,
+    "bandera" : "🇧🇴",
+    "codigo" : "BOL",
+    "nombre" : "Bolivia"
+  }, {
+    "api_id" : 1448,
+    "bandera" : "🇧🇷",
+    "codigo" : "BRA",
+    "nombre" : "Brasil"
+  }, {
+    "api_id" : 1749,
+    "bandera" : "🇨🇱",
+    "codigo" : "CHL",
+    "nombre" : "Chile"
+  }, {
+    "api_id" : 1457,
+    "bandera" : "🇨🇴",
+    "codigo" : "COL",
+    "nombre" : "Colombia"
+  }, {
+    "api_id" : 1847,
+    "bandera" : "🇪🇨",
+    "codigo" : "ECU",
+    "nombre" : "Ecuador"
+  }, {
+    "api_id" : 1458,
+    "bandera" : "🇯🇵",
+    "codigo" : "JPN",
+    "nombre" : "Japón"
+  }, {
+    "api_id" : 4040,
+    "bandera" : "🇵🇾",
+    "codigo" : "PRY",
+    "nombre" : "Paraguay"
+  }, {
+    "api_id" : 1441,
+    "bandera" : "🇵🇪",
+    "codigo" : "PER",
+    "nombre" : "Perú"
+  }, {
+    "api_id" : 1427,
+    "bandera" : "🇶🇦",
+    "codigo" : "QAT",
+    "nombre" : "Qatar"
+  }, {
+    "api_id" : 1434,
+    "bandera" : "🇺🇾",
+    "codigo" : "URY",
+    "nombre" : "Uruguay"
+  }, {
+    "api_id" : 1850,
+    "bandera" : "🇻🇪",
+    "codigo" : "VEN",
+    "nombre" : "Venezuela"
+  } ],
+  "partidos" : [ {
+    "fecha" : "14-06",
+    "hora" : "20:30",
+    "local" : 2,
+    "visita" : 1
+  }, {
+    "fecha" : "15-06",
+    "hora" : "15:00",
+    "local" : 11,
+    "visita" : 8
+  }, {
+    "fecha" : "15-06",
+    "hora" : "18:00",
+    "local" : 0,
+    "visita" : 4
+  }, {
+    "fecha" : "16-06",
+    "hora" : "15:00",
+    "local" : 7,
+    "visita" : 9
+  }, {
+    "fecha" : "16-06",
+    "hora" : "18:00",
+    "local" : 10,
+    "visita" : 5
+  }, {
+    "fecha" : "17-06",
+    "hora" : "19:00",
+    "local" : 6,
+    "visita" : 3
+  }, {
+    "fecha" : "18-06",
+    "hora" : "17:30",
+    "local" : 1,
+    "visita" : 8
+  }, {
+    "fecha" : "18-06",
+    "hora" : "20:30",
+    "local" : 3,
+    "visita" : 11
+  }, {
+    "fecha" : "19-06",
+    "hora" : "17:30",
+    "local" : 4,
+    "visita" : 9
+  }, {
+    "fecha" : "19-06",
+    "hora" : "20:30",
+    "local" : 0,
+    "visita" : 7
+  }, {
+    "fecha" : "20-06",
+    "hora" : "19:00",
+    "local" : 10,
+    "visita" : 6
+  }, {
+    "fecha" : "21-06",
+    "hora" : "19:00",
+    "local" : 5,
+    "visita" : 3
+  }, {
+    "fecha" : "22-06",
+    "hora" : "15:00",
+    "local" : 1,
+    "visita" : 11
+  }, {
+    "fecha" : "22-06",
+    "hora" : "15:00",
+    "local" : 8,
+    "visita" : 2
+  }, {
+    "fecha" : "23-06",
+    "hora" : "15:00",
+    "local" : 9,
+    "visita" : 0
+  }, {
+    "fecha" : "23-06",
+    "hora" : "15:00",
+    "local" : 4,
+    "visita" : 7
+  }, {
+    "fecha" : "24-06",
+    "hora" : "19:00",
+    "local" : 3,
+    "visita" : 10
+  }, {
+    "fecha" : "24-06",
+    "hora" : "19:00",
+    "local" : 5,
+    "visita" : 6
+  } ]
+}
