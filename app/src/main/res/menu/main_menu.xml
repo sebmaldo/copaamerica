@@ -3,5 +3,5 @@
 
     <item
         android:id="@+id/actividad_grupal"
-        android:title="Actividad Grupal" />
+        android:title="Seleccionar Primeros Lugares" />
 </menu>
