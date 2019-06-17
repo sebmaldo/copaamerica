@@ -6,6 +6,7 @@ import java.util.List;
 public class FirebaseHelper {
     public static void saveToFirebase(List<Country> toSave) {
         //TODO: Acá va el código de conexión a Firebase para salvar los lugares.
+        //Aqui van las dos lineas para actualizar la base datos...
     }
 
     public static List<Country> getFirstPlaces(){
