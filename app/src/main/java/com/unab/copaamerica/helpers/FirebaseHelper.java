@@ -1,5 +1,11 @@
 package com.unab.copaamerica.helpers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import com.unab.copaamerica.constants.Cons;
 import com.unab.copaamerica.model.Country;
 
 import java.util.ArrayList;
@@ -17,6 +23,7 @@ public class FirebaseHelper {
         //Aqui van las dos lineas para actualizar la base datos...
 
         /*Sección de código para guardar en memoria por mientras en ram*/
+        inMemPosition.remove(position);
         inMemPosition.add(position, toSave);
     }
 
@@ -48,5 +55,21 @@ public class FirebaseHelper {
         /*Fin de la sección de código para tener datos*/
 
         return inMemPosition;
+    }
+
+    public static ArrayList<Country> getCountries(ArrayList<LinkedTreeMap<String, Object>> listaPaises){
+        ArrayList<Country> paises = new ArrayList<>();
+        for(LinkedTreeMap<String, Object> currentCountry: listaPaises) {
+            paises.add(new Country(
+                    (String) currentCountry.get(Cons.KEY_NAME),
+                    (String) currentCountry.get(Cons.KEY_CODE),
+                    (String) currentCountry.get(Cons.KEY_FLAG),
+                    currentCountry.get(Cons.KEY_API_ID)+"",
+                    "",
+                    (String) currentCountry.get(Cons.KEY_WIN_PERCENTAGE)
+            ));
+        }
+
+        return paises;
     }
 }
