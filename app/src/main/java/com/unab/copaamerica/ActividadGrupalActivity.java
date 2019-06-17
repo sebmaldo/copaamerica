@@ -17,16 +17,17 @@ import java.util.ArrayList;
 public class ActividadGrupalActivity extends AppCompatActivity {
     ArrayList<Country> Positions;
     Context context;
+    boolean dentro = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.country_positions_selected_list);
         context = this;
         createPositionView();
     }
 
     private void createPositionView() {
+        setContentView(R.layout.country_positions_selected_list);
         Positions = FirebaseHelper.getFirstPlaces();
         PositionAdapter adapter = new PositionAdapter(context, Positions.toArray(new Country[Positions.size()]));
         ListView positionList = findViewById(R.id.cpsl_list);
@@ -37,8 +38,21 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         positionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                dentro = true;
                 setContentView(R.layout.country_list);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(dentro){
+            dentro = false;
+            createPositionView();
+        }
+        else {
+            finish();
+            super.onBackPressed();
+        }
     }
 }
