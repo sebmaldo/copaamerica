@@ -2,7 +2,7 @@ package com.unab.copaamerica.constants;
 
 public class Cons {
     //Shared Preferences
-    public static final String SHARED_PREFERENCES = "CopaAmericaData";
+    public static final String SHARED_PREFERENCES = "CopaAmericaDataNew";
     public static final String SP_MATCHS = "partidos";
     public static final String SP_COUNTRIES = "paises";
 
@@ -19,6 +19,7 @@ public class Cons {
     public static final String KEY_NAME = "nombre";
     public static final String KEY_HOUR = "hora";
     public static final String KEY_DATE = "fecha";
+    public static final String KEY_WIN_PERCENTAGE = "prob_ganar";
 
     //Bundle
     public static final String B_LOCAL_API = "localAPI";

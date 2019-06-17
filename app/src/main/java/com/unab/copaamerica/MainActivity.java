@@ -55,13 +55,15 @@ public class MainActivity extends AppCompatActivity {
                     (String)localData.get(Cons.KEY_CODE),
                     (String)localData.get(Cons.KEY_FLAG),
                     localData.get(Cons.KEY_API_ID)+"",
-                    (currentMatch.get(Cons.KEY_LOCAL)).toString());
+                    (currentMatch.get(Cons.KEY_LOCAL)).toString(),
+                    (String)localData.get(Cons.KEY_WIN_PERCENTAGE));
             Country visita = new Country(
                     (String)visitaData.get(Cons.KEY_NAME),
                     (String)visitaData.get(Cons.KEY_CODE),
                     (String)visitaData.get(Cons.KEY_FLAG),
                     visitaData.get(Cons.KEY_API_ID)+"",
-                    (currentMatch.get(Cons.KEY_VISIT)).toString());
+                    (currentMatch.get(Cons.KEY_VISIT)).toString(),
+                    (String)visitaData.get(Cons.KEY_WIN_PERCENTAGE));
             Match MatchToAdd = new Match(
                     local,
                     visita,

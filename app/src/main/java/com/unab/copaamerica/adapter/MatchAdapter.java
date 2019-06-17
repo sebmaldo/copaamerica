@@ -33,12 +33,12 @@ public class MatchAdapter extends ArrayAdapter<Match> {
 
             item.setTag(holder);
 
-        } else {
+        } else {git
             holder = (MatchHolder)item.getTag();
         }
 
         Match currentMatch = getItem(position);
-        holder.codigoLocal.setText(currentMatch.getLocal().getCodigo());
+        holder.codigoLocal.setText(currentMatch.getLocal().getCodigo() + currentMatch.getLocal().getPorcentajeProbabilidad());
         holder.banderaLocal.setText(currentMatch.getLocal().getBandera());
         holder.codigoVisita.setText(currentMatch.getVisita().getCodigo());
         holder.banderaVisita.setText(currentMatch.getVisita().getBandera());

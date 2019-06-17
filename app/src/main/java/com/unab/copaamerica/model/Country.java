@@ -6,13 +6,25 @@ public class Country {
     private String bandera;
     private String codigoApi;
     private String id;
+    private String porcentajeProbabilidad;
 
-    public Country(String nombre, String codigo, String bandera, String codigoApi, String id) {
+    public String getPorcentajeProbabilidad() {
+        return porcentajeProbabilidad;
+    }
+
+    public void setPorcentajeProbabilidad(String porcentajeProbabilidad) {
+        this.porcentajeProbabilidad = porcentajeProbabilidad;
+    }
+
+
+
+    public Country(String nombre, String codigo, String bandera, String codigoApi, String id, String porcentajeProbabilidad) {
         this.nombre = nombre;
         this.codigo = codigo;
         this.bandera = bandera;
         this.codigoApi = codigoApi;
         this.id = id;
+        this.porcentajeProbabilidad = porcentajeProbabilidad;
     }
 
     public String getNombre() {
