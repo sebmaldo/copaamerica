@@ -18,6 +18,7 @@ public class ActividadGrupalActivity extends AppCompatActivity {
     ArrayList<Country> Positions;
     Context context;
     boolean dentro = false;
+    int position = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class ActividadGrupalActivity extends AppCompatActivity {
 
         positionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 dentro = true;
                 setContentView(R.layout.country_list);
             }
@@ -48,6 +49,7 @@ public class ActividadGrupalActivity extends AppCompatActivity {
     public void onBackPressed(){
         if(dentro){
             dentro = false;
+            position = -1;
             createPositionView();
         }
         else {
