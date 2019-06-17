@@ -38,7 +38,7 @@ public class MatchAdapter extends ArrayAdapter<Match> {
         }
 
         Match currentMatch = getItem(position);
-        holder.codigoLocal.setText(currentMatch.getLocal().getCodigo() + currentMatch.getLocal().getPorcentajeProbabilidad());
+        holder.codigoLocal.setText(currentMatch.getLocal().getCodigo());
         holder.banderaLocal.setText(currentMatch.getLocal().getBandera());
         holder.codigoVisita.setText(currentMatch.getVisita().getCodigo());
         holder.banderaVisita.setText(currentMatch.getVisita().getBandera());
