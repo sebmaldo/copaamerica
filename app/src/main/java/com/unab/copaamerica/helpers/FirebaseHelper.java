@@ -28,12 +28,12 @@ public class FirebaseHelper {
         /*Esta sección de código es para tener datos, se debe eliminar al tener implementado
         * firebase, debe en retornar un array list de 3 posiciones.*/
         ArrayList<Country> salida = new ArrayList<>();
-        salida.add(new Country("Argentina",
-                "ARG",
-                "\uD83C\uDDE6\uD83C\uDDF7",
-                "1443",
+        salida.add(new Country("Chile",
+                "CHL",
+                "\uD83C\uDDE8\uD83C\uDDF1",
+                "1749",
                 "",
-                "9%"));
+                "5%"));
         salida.add(new Country("Argentina",
                 "ARG",
                 "\uD83C\uDDE6\uD83C\uDDF7",

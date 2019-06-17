@@ -14,7 +14,7 @@ import com.unab.copaamerica.model.Country;
 public class PositionAdapter extends ArrayAdapter<Country> {
     public PositionAdapter(@NonNull Context context,
                            @NonNull Country[] data){
-        super(context, R.layout.country_item, data);
+        super(context, R.layout.country_position_selected_item, data);
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -23,7 +23,7 @@ public class PositionAdapter extends ArrayAdapter<Country> {
 
         if(item == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            item = inflater.inflate(R.layout.country_item, null);
+            item = inflater.inflate(R.layout.country_position_selected_item, null);
 
             holder = new CountryHolder();
             holder.posicionPais = item.findViewById(R.id.cpsi_posicion);

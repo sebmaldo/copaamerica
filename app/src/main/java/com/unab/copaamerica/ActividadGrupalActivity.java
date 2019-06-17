@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -32,5 +33,12 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         View header = getLayoutInflater().inflate(R.layout.country_position_selected_list_header, null);
         positionList.addHeaderView(header);
         positionList.setAdapter(adapter);
+
+        positionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                setContentView(R.layout.country_list);
+            }
+        });
     }
 }
