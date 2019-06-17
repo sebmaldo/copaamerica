@@ -33,7 +33,7 @@ public class MatchAdapter extends ArrayAdapter<Match> {
 
             item.setTag(holder);
 
-        } else {git
+        } else {
             holder = (MatchHolder)item.getTag();
         }
 
