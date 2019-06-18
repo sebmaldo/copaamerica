@@ -107,7 +107,7 @@ public class ActividadGrupalActivity extends AppCompatActivity {
     private void sendMail() {
         String subject = "Mis predicciones para la copa america";
         String text = "Hola:\n\n" +
-                "Te quería compartir mis predicciones para la copa america 2019\n\n" +
+                "Te comparto mis predicciones para la copa america 2019\n\n" +
                 "1.- " + (Positions.get(0) == null ? "Aún no lo sé" : Positions.get(0).getNombre()) + "\n" +
                 "2.- " + (Positions.get(1) == null ? "Aún no lo sé" : Positions.get(1).getNombre()) + "\n" +
                 "3.- " + (Positions.get(2) == null ? "Aún no lo sé" : Positions.get(2).getNombre()) + "\n" +
