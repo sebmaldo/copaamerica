@@ -1,6 +1,7 @@
 package com.unab.copaamerica;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -66,6 +67,14 @@ public class ActividadGrupalActivity extends AppCompatActivity {
                 createCountrySelectorView(i);
             }
         });
+
+        Button sendMail = findViewById(R.id.cpsl_button);
+        sendMail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMail();
+            }
+        });
     }
 
     private void createCountrySelectorView(int i){
@@ -95,6 +104,21 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         });
     }
 
+    private void sendMail() {
+        String subject = "Mis predicciones para la copa america";
+        String text = "Hola:\n\n" +
+                "Te quería compartir mis predicciones para la copa america 2019\n\n" +
+                "1.- " + (Positions.get(0) == null ? "Aún no lo sé" : Positions.get(0).getNombre()) + "\n" +
+                "2.- " + (Positions.get(1) == null ? "Aún no lo sé" : Positions.get(1).getNombre()) + "\n" +
+                "3.- " + (Positions.get(2) == null ? "Aún no lo sé" : Positions.get(2).getNombre()) + "\n" +
+                "\n\n ¿Qué opinas tú?";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc2822");
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(intent);
+    }
+
     private Country[] getPosibleCountries(){
         ArrayList<Country> filtered = new ArrayList<>();
         for (Country item: Paises){
@@ -118,7 +142,6 @@ public class ActividadGrupalActivity extends AppCompatActivity {
             createPositionView();
         }
         else {
-            finish();
             super.onBackPressed();
         }
     }
