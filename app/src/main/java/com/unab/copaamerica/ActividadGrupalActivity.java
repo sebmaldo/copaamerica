@@ -33,6 +33,22 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         createPositionView();
     }
 
+    private ArrayList<Country> getCountries(ArrayList<LinkedTreeMap<String, Object>> listaPaises){
+        ArrayList<Country> paises = new ArrayList<>();
+        for(LinkedTreeMap<String, Object> currentCountry: listaPaises) {
+            paises.add(new Country(
+                    (String) currentCountry.get(Cons.KEY_NAME),
+                    (String) currentCountry.get(Cons.KEY_CODE),
+                    (String) currentCountry.get(Cons.KEY_FLAG),
+                    currentCountry.get(Cons.KEY_API_ID)+"",
+                    "",
+                    (String) currentCountry.get(Cons.KEY_WIN_PERCENTAGE)
+            ));
+        }
+
+        return paises;
+    }
+
     private void createPositionView() {
         dentro = false;
         position = -1;
@@ -61,10 +77,9 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String paisesJson = prefs.getString(Cons.SP_COUNTRIES, "");
         ArrayList<LinkedTreeMap<String, Object>> listaPaises = gson.fromJson(paisesJson, ArrayList.class);
-        System.out.println("Lista de paises a colocar " + listaPaises.size());
-        Paises = FirebaseHelper.getCountries(listaPaises);
-        System.out.println("Lista de paises a colocar " + Paises.size());
-        CountySelectorAdapter adapter = new CountySelectorAdapter(context, Paises.toArray(new Country[Paises.size()]));
+        Paises = getCountries(listaPaises);
+        final Country[] countiesToSelect = getPosibleCountries();
+        CountySelectorAdapter adapter = new CountySelectorAdapter(context, countiesToSelect);
         final ListView countryList = findViewById(R.id.ci_list);
         View header = getLayoutInflater().inflate(R.layout.country_list_header, null);
         countryList.addHeaderView(header);
@@ -73,11 +88,28 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         countryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                FirebaseHelper.saveToFirebase(position - 1, Paises.get(i - 1));
+                FirebaseHelper.saveToFirebase(position - 1, countiesToSelect[i - 1]);
                 createPositionView();
 
             }
         });
+    }
+
+    private Country[] getPosibleCountries(){
+        ArrayList<Country> filtered = new ArrayList<>();
+        for (Country item: Paises){
+            boolean putItem = true;
+            for(int i = 0; i < 3; i ++){
+                Country toReview = Positions.get(i);
+                if(toReview!=null && toReview.getCodigo().equalsIgnoreCase(item.getCodigo()) && i != position - 1){
+                    putItem = false;
+                }
+            }
+            if(putItem){
+                filtered.add(item);
+            }
+        }
+        return filtered.toArray(new Country[filtered.size()]);
     }
 
     @Override
