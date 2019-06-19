@@ -3,8 +3,14 @@ package com.unab.copaamerica;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +31,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
         loadCountryList();
     }
 
@@ -34,42 +39,84 @@ public class SplashActivity extends AppCompatActivity {
                 getSharedPreferences(Cons.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         String paisesJson = prefs.getString(Cons.SP_COUNTRIES, "");
 
-        if(!paisesJson.equals("")) {
+        if(paisesJson!=null && !paisesJson.equals("")) {
             loadMatchList();
             return;
         }
+        if(isNetworkAvailable()){
+            DatabaseReference paisesDB = FirebaseDatabase.getInstance().getReference().child(Cons.FB_COUNTRIES);
 
-        DatabaseReference paisesDB = FirebaseDatabase.getInstance().getReference().child(Cons.FB_COUNTRIES);
-
-        paisesDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot paises) {
-                for (DataSnapshot pais: paises.getChildren()) {
-                    listaPaises.add((HashMap)pais.getValue());
+            paisesDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot paises) {
+                    for (DataSnapshot pais: paises.getChildren()) {
+                        listaPaises.add((HashMap)pais.getValue());
+                    }
+                    loadMatchList();
                 }
-                loadMatchList();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) { }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    System.out.println(databaseError.getMessage());
+                    Toast.makeText(getApplicationContext(),"Ha ocurrido un error",Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+    }
+
+    public boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager=(ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //desde la versión 15 de android facia arriba se piden todas las redes
+            //y se everifica la info de cada red
+            Network[] networks = connectivityManager.getAllNetworks();
+            NetworkInfo networkInfo;
+            for (Network mNetwork : networks) {
+                networkInfo = connectivityManager.getNetworkInfo(mNetwork);
+                if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
+                    return true;
+                }
+            }
+        }else {
+            //desde la versión 15 de android hacia atrás, se podía traer directamente toda la info de las redes
+            //actualemente deprecado.
+            if (connectivityManager != null) {
+                NetworkInfo[] info = connectivityManager.getAllNetworkInfo();
+                if (info != null) {
+                    for (NetworkInfo anInfo : info) {
+                        if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        Toast.makeText(getApplicationContext(),"No hay conexión a internet, conéctese e intente nuevamente.",Toast.LENGTH_LONG).show();
+        return false;
     }
 
     public void loadMatchList(){
-        DatabaseReference partidosDB = FirebaseDatabase.getInstance().getReference().child(Cons.FB_MATCHS);
+        if(isNetworkAvailable()){
+            DatabaseReference partidosDB = FirebaseDatabase.getInstance().getReference().child(Cons.FB_MATCHS);
 
-        partidosDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot partidos) {
-                for (DataSnapshot partido: partidos.getChildren()) {
-                    listaPartidos.add((HashMap)partido.getValue());
+            partidosDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot partidos) {
+                    for (DataSnapshot partido: partidos.getChildren()) {
+                        listaPartidos.add((HashMap)partido.getValue());
+                    }
+                    goToFirstPage();
                 }
-                goToFirstPage();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) { }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    System.out.println(databaseError.getMessage());
+                    Toast.makeText(getApplicationContext(),"Ha ocurrido un error",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
     }
 
     public void goToFirstPage() {
