@@ -25,7 +25,7 @@ import com.unab.copaamerica.model.Country;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 
 public class SplashActivity extends AppCompatActivity {
     //Se crean listas para almacenar partidos y países por cargar
@@ -35,8 +35,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Esta actividad hereda de  AppCompactActivity, implementa el método on create
-        //lo primero que hace es llamar al mis método de su padre que
-        //en resumen prepara la máquina para levantar las vistas.
+        //lo primero que hace es llamar al  método de su padre que
+        //en resumen prepara el dispositivo para levantar las vistas.
         super.onCreate(savedInstanceState);
         //se setea la vista splash
         setContentView(R.layout.activity_splash);
@@ -60,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
             //Se agregan a la referencia escucha de eventos para cuando los datos lleguen,
             paisesDB.addListenerForSingleValueEvent(new ValueEventListener() {
                 //se estará escuchando por dos eventos
-                //indatachange: cuando llegan los valores de sde la fb
+                //indatachange: cuando llegan los valores desde la fb
                 //oncancell: cuando ocurre un error a nivel de servidor en la fb
                 @Override
                 public void onDataChange(@NonNull DataSnapshot paises) {
@@ -87,7 +87,7 @@ public class SplashActivity extends AppCompatActivity {
         //Se inicializa un conectivity manager, que permite acceder a los datos de conectividad del dispositivo.
         ConnectivityManager connectivityManager=(ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //desde la versión 15 de android facia arriba se piden todas las redes
+            //desde la versión 15 de android hacia arriba se piden todas las redes
             //y se everifica la info de cada red
             Network[] networks = connectivityManager.getAllNetworks();
             NetworkInfo networkInfo;
@@ -111,7 +111,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         }
-        //Se muestra un pequeño mensaje de error al no exitir intertnet,
+        //Se muestra un pequeño mensaje de error al no exitir internet,
         Toast.makeText(getApplicationContext(),"No hay conexión a internet, conéctese e intente nuevamente.",Toast.LENGTH_LONG).show();
         return false;
     }
@@ -126,7 +126,7 @@ public class SplashActivity extends AppCompatActivity {
                     for (DataSnapshot partido: partidos.getChildren()) {
                         listaPartidos.add((HashMap)partido.getValue());
                     }
-                    //La diferencia radica en que una vez están cargados los partidos, se procede a cargar la primera página.
+                    //La diferencia radica en que una vez están cargados los partidos, se procede a cargar los favoritos
                     loadFavorites();
                 }
 
@@ -165,7 +165,7 @@ public class SplashActivity extends AppCompatActivity {
 
         favoritosDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot favoritos) {
+            public void onDataChange(@NonNull DataSnapshot favoritos) {
                 ArrayList<Country> lsCountry = new ArrayList<>(3);
 
                 lsCountry.add(null);
@@ -173,17 +173,22 @@ public class SplashActivity extends AppCompatActivity {
                 lsCountry.add(null);
 
                 for (DataSnapshot favorito: favoritos.getChildren()) {
-                    int favPosition = Integer.parseInt(favorito.getKey().split("_")[1]);
-                    Country varCountry = favorito.getValue(Country.class);
-                    lsCountry.remove(favPosition);
-                    lsCountry.add(favPosition, varCountry);
+                    if(favorito!=null && favorito.getKey()!=null){
+                        int favPosition = Integer.parseInt(favorito.getKey().split("_")[1]);
+                        Country varCountry = favorito.getValue(Country.class);
+                        lsCountry.remove(favPosition);
+                        lsCountry.add(favPosition, varCountry);
+                    }
                 }
                 FirebaseHelper.initHelper(lsCountry);
                 goToFirstPage();
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println(databaseError.getMessage());
+                Toast.makeText(getApplicationContext(),"Ha ocurrido un error",Toast.LENGTH_LONG).show();
+            }
         });
 
     }
