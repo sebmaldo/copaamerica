@@ -137,10 +137,11 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    @SuppressLint("ApplySharedPref")
+    @SuppressLint("ApplySharedPref") //Abotación para que ignore el warning por el commit.
     public void goToFirstPage() {
         //Se guardan en las preferencias compartidas los datos descargados
-        //de esta manera estará disponibles durante la ejecucuión.
+        //de esta manera estarán disponibles durante la ejecución.
+        //y serán accesibles desde otras actividades.
         SharedPreferences prefs =getSharedPreferences(Cons.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         SharedPreferences.Editor editor = prefs.edit();
@@ -150,7 +151,7 @@ public class SplashActivity extends AppCompatActivity {
         }
         editor.putString(Cons.SP_MATCHS, gson.toJson(listaPartidos));
         editor.commit();
-
+        //Ahora se intenta psar a la actividad principal.
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity ( intent );
         this.finish();

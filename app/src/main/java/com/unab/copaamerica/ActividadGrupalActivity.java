@@ -1,14 +1,17 @@
 package com.unab.copaamerica;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
@@ -26,11 +29,14 @@ import java.util.ArrayList;
 public class ActividadGrupalActivity extends AppCompatActivity {
 
     /**
-     * Para manejar los estados de la actividad usamos el listado de posiciones
-     * en paises el listado de los paises completos
-     * como utilizamos más de una vista en una misma actividad usamos la variable dentro para decir
-     * si estamos dentro de la segunda vista o no.
-     * en position dejamos el puesto que estamos dejando seleccionando en este momento.
+     * Para manejar los estados de la actividad usamos:
+     * -> posiciones: que contendrá listado de posiciones
+     * -> paises: el listado de los paises completos
+     * -> position guarda el puesto que está seleccionando.
+     *
+     * Como se usa más de una vista esta actividad usamos la variable "dentro" como bandera
+     * representando si estamos dentro de la segunda vista o no.
+     *
      */
     ArrayList<Country> positions;
     ArrayList<Country> paises;
@@ -43,8 +49,8 @@ public class ActividadGrupalActivity extends AppCompatActivity {
     Context context;
 
     /**
-     * Metodo on create se sobre escribe y con eso se utiliza el metodo secundario createPositionView
-     * @param savedInstanceState
+     * Metodo on create se sobrescribe llamando al método padre, seteando el conetxto actual y creando la vista de posiciones.
+     * @param savedInstanceState Estado de la instancia
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +61,8 @@ public class ActividadGrupalActivity extends AppCompatActivity {
 
     /**
      * Metodo auxiliar que recibe un listado de paises como hash y lo transforma a lista de countries.
-     * @param listaPaises
-     * @return
+     * @param listaPaises ArrayList que contiene los países
+     * @return ArrayList
      */
     private ArrayList<Country> getCountries(ArrayList<LinkedTreeMap<String, Object>> listaPaises){
         ArrayList<Country> paises = new ArrayList<>();
@@ -84,8 +90,11 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         setContentView(R.layout.country_positions_selected_list);
         //Se usa el firebase helper para poder traer el listado de paises.
         positions = FirebaseHelper.getFirstPlaces();
-        PositionAdapter adapter = new PositionAdapter(context, positions.toArray(new Country[positions.size()]));
+        //Por motivos de performance, entregar un arrglo con largo fijo es indeseable, se recomienda con
+        //largo variable
+        PositionAdapter adapter = new PositionAdapter(context, positions.toArray(new Country[/*positions.size()*/0]));
         ListView positionList = findViewById(R.id.cpsl_list);
+        @SuppressLint("InflateParams")
         View header = getLayoutInflater().inflate(R.layout.country_position_selected_list_header, null);
         positionList.addHeaderView(header);
         positionList.setAdapter(adapter);
@@ -98,6 +107,7 @@ public class ActividadGrupalActivity extends AppCompatActivity {
         });
 
         Button sendMail = findViewById(R.id.cpsl_button);
+        //lambda exp (Java 8)
         sendMail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,12 +124,16 @@ public class ActividadGrupalActivity extends AppCompatActivity {
                 getSharedPreferences(Cons.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String paisesJson = prefs.getString(Cons.SP_COUNTRIES, "");
+        @SuppressWarnings("unchecked")
         ArrayList<LinkedTreeMap<String, Object>> listaPaises = gson.fromJson(paisesJson, ArrayList.class);
         paises = getCountries(listaPaises);
         final Country[] countiesToSelect = getPosibleCountries();
         CountySelectorAdapter adapter = new CountySelectorAdapter(context, countiesToSelect);
         final ListView countryList = findViewById(R.id.ci_list);
+        @SuppressLint("InflateParams")
         View header = getLayoutInflater().inflate(R.layout.country_list_header, null);
+        //root es un ViewGroup que sirve vomo padre para definir kayouts en las view hijas. Ya que no se usa esa
+        //característuca, se suprime el waring
         countryList.addHeaderView(header);
         countryList.setAdapter(adapter);
 
@@ -134,18 +148,25 @@ public class ActividadGrupalActivity extends AppCompatActivity {
     }
 
     private void sendMail() {
-        String subject = "Mis predicciones para la copa america";
-        String text = "Hola:\n\n" +
-                "Te comparto mis predicciones para la copa america 2019\n\n" +
-                "1.- " + (positions.get(0) == null ? "Aún no lo sé" : positions.get(0).getNombre()) + "\n" +
-                "2.- " + (positions.get(1) == null ? "Aún no lo sé" : positions.get(1).getNombre()) + "\n" +
-                "3.- " + (positions.get(2) == null ? "Aún no lo sé" : positions.get(2).getNombre()) + "\n" +
-                "\n\n ¿Qué opinas tú?";
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("message/rfc2822");
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-        startActivity(intent);
+        if(positions.get(0)!=null || positions.get(1)!=null || positions.get(2)!=null){
+            String asunto = "Mis predicciones para la copa america";
+            String contenido = "Hola:<br>" +
+                    "Te comparto <b>mis predicciones</b> para la copa america 2019<br>" +
+                    "<ol>" +
+                    "   <li>[1] " + (positions.get(0) == null ? "Aún no lo sé" : positions.get(0).getNombre()) + "</li>" +
+                    "   <li>[2] " + (positions.get(1) == null ? "Aún no lo sé" : positions.get(1).getNombre()) + "</li>" +
+                    "   <li>[3] " + (positions.get(2) == null ? "Aún no lo sé" : positions.get(2).getNombre()) + "</li>" +
+                    "</ol>" +
+                    "<br><br> ¿Qué opinas tú?";
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/html");
+            intent.putExtra(Intent.EXTRA_SUBJECT, asunto);
+            intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(contenido));
+            startActivity(intent);
+        }
+        else{
+             Toast.makeText(getApplicationContext(),"Seleccione al menos un país",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private Country[] getPosibleCountries(){
@@ -162,7 +183,7 @@ public class ActividadGrupalActivity extends AppCompatActivity {
                 filtered.add(item);
             }
         }
-        return filtered.toArray(new Country[filtered.size()]);
+        return filtered.toArray(new Country[0/*filtered.size()*/]);
     }
 
     @Override

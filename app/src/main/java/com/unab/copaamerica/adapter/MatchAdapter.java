@@ -1,6 +1,8 @@
 package com.unab.copaamerica.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ public class MatchAdapter extends ArrayAdapter<Match> {
         super(context, R.layout.match, data);
     }
 
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    @SuppressLint("InflateParams")
+    @NonNull
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         View item = convertView;
         final MatchHolder holder;
 
@@ -38,13 +42,14 @@ public class MatchAdapter extends ArrayAdapter<Match> {
         }
 
         Match currentMatch = getItem(position);
-        holder.codigoLocal.setText(currentMatch.getLocal().getCodigo());
-        holder.banderaLocal.setText(currentMatch.getLocal().getBandera());
-        holder.codigoVisita.setText(currentMatch.getVisita().getCodigo());
-        holder.banderaVisita.setText(currentMatch.getVisita().getBandera());
-        holder.hora.setText(currentMatch.getHora());
-        holder.fecha.setText(currentMatch.getFecha());
-
+        if(currentMatch!=null){
+            holder.codigoLocal.setText(currentMatch.getLocal().getCodigo());
+            holder.banderaLocal.setText(currentMatch.getLocal().getBandera());
+            holder.codigoVisita.setText(currentMatch.getVisita().getCodigo());
+            holder.banderaVisita.setText(currentMatch.getVisita().getBandera());
+            holder.hora.setText(currentMatch.getHora());
+            holder.fecha.setText(currentMatch.getFecha());
+        }
         return(item);
     }
 

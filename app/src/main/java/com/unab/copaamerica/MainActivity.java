@@ -1,5 +1,6 @@
 package com.unab.copaamerica;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,39 +31,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         context = this;
         setContentView(R.layout.match_list);
-
         createMatchView();
     }
 
     public void loadMatchs() {
-        SharedPreferences prefs =
-                getSharedPreferences(Cons.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences prefs =getSharedPreferences(Cons.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String partidosJson = prefs.getString(Cons.SP_MATCHS, "");
         String paisesJson = prefs.getString(Cons.SP_COUNTRIES, "");
 
-        ArrayList<LinkedTreeMap<String, Object>> listaPartidos = gson.fromJson(partidosJson, ArrayList.class);
-        ArrayList<LinkedTreeMap<String, Object>> listaPaises = gson.fromJson(paisesJson, ArrayList.class);
+        //noinspection unchecked
+        ArrayList <LinkedTreeMap<String, Object>> listaPartidos = gson.fromJson(partidosJson, ArrayList.class);
+        //noinspection unchecked
+        ArrayList <LinkedTreeMap<String, Object>> listaPaises = gson.fromJson(paisesJson, ArrayList.class);
 
         Matches = new ArrayList<>();
         for(LinkedTreeMap<String, Object> currentMatch: listaPartidos) {
+            @SuppressWarnings("ConstantConditions")
             int localKey = ((Double)currentMatch.get(Cons.KEY_LOCAL)).intValue();
+            @SuppressWarnings("ConstantConditions")
             int visitaKey = ((Double)currentMatch.get(Cons.KEY_VISIT)).intValue();
             LinkedTreeMap<String, Object> localData = listaPaises.get(localKey);
             LinkedTreeMap<String, Object> visitaData = listaPaises.get(visitaKey);
+
             Country local = new Country(
                     (String)localData.get(Cons.KEY_NAME),
                     (String)localData.get(Cons.KEY_CODE),
                     (String)localData.get(Cons.KEY_FLAG),
                     localData.get(Cons.KEY_API_ID)+"",
-                    (currentMatch.get(Cons.KEY_LOCAL)).toString(),
+                    Integer.toString(localKey),
                     (String)localData.get(Cons.KEY_WIN_PERCENTAGE));
             Country visita = new Country(
                     (String)visitaData.get(Cons.KEY_NAME),
                     (String)visitaData.get(Cons.KEY_CODE),
                     (String)visitaData.get(Cons.KEY_FLAG),
                     visitaData.get(Cons.KEY_API_ID)+"",
-                    (currentMatch.get(Cons.KEY_VISIT)).toString(),
+                    Integer.toString(visitaKey),
                     (String)visitaData.get(Cons.KEY_WIN_PERCENTAGE));
             Match MatchToAdd = new Match(
                     local,
@@ -76,10 +80,11 @@ public class MainActivity extends AppCompatActivity {
     public void createMatchView(){
         loadMatchs();
 
-        MatchAdapter adapter = new MatchAdapter(context, Matches.toArray(new Match[Matches.size()]));
+        MatchAdapter adapter = new MatchAdapter(context, Matches.toArray(new Match[0/*Matches.size()*/]));
 
         ListView matchList = findViewById(R.id.match_list);
 
+        @SuppressLint("InflateParams")
         View header = getLayoutInflater().inflate(R.layout.match_list_header, null);
         matchList.addHeaderView(header);
         matchList.setAdapter(adapter);
@@ -113,13 +118,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.actividad_grupal:
-                Intent intent = new Intent(MainActivity.this, ActividadGrupalActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if(item.getItemId()==R.id.actividad_grupal){
+            Intent intent = new Intent(MainActivity.this, ActividadGrupalActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        else{
+            return super.onOptionsItemSelected(item);
         }
     }
 }
