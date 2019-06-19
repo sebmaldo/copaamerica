@@ -20,9 +20,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.unab.copaamerica.constants.Cons;
+import com.unab.copaamerica.helpers.FirebaseHelper;
+import com.unab.copaamerica.model.Country;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
     //Se crean listas para almacenar partidos y países por cargar
@@ -124,7 +127,7 @@ public class SplashActivity extends AppCompatActivity {
                         listaPartidos.add((HashMap)partido.getValue());
                     }
                     //La diferencia radica en que una vez están cargados los partidos, se procede a cargar la primera página.
-                    goToFirstPage();
+                    loadFavorites();
                 }
 
                 @Override
@@ -155,5 +158,33 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         this.startActivity ( intent );
         this.finish();
+    }
+
+    public void loadFavorites() {
+        DatabaseReference favoritosDB = FirebaseDatabase.getInstance().getReference().child(Cons.FB_FAVORITES);
+
+        favoritosDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot favoritos) {
+                ArrayList<Country> lsCountry = new ArrayList<>(3);
+
+                lsCountry.add(null);
+                lsCountry.add(null);
+                lsCountry.add(null);
+
+                for (DataSnapshot favorito: favoritos.getChildren()) {
+                    int favPosition = Integer.parseInt(favorito.getKey().split("_")[1]);
+                    Country varCountry = favorito.getValue(Country.class);
+                    lsCountry.remove(favPosition);
+                    lsCountry.add(favPosition, varCountry);
+                }
+                FirebaseHelper.initHelper(lsCountry);
+                goToFirstPage();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+
     }
 }

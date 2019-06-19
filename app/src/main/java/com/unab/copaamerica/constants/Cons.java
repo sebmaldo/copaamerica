@@ -9,6 +9,7 @@ public class Cons {
     //Firebase
     public static final String FB_MATCHS = "partidos";
     public static final String FB_COUNTRIES = "paises";
+    public static final String FB_FAVORITES = "favoritos";
 
     //Firebase keys
     public static final String KEY_LOCAL = "local";
