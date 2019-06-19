@@ -161,35 +161,38 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void loadFavorites() {
-        DatabaseReference favoritosDB = FirebaseDatabase.getInstance().getReference().child(Cons.FB_FAVORITES);
+        if(isNetworkAvailable()){
+            DatabaseReference favoritosDB = FirebaseDatabase.getInstance().getReference().child(Cons.FB_FAVORITES);
 
-        favoritosDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot favoritos) {
-                ArrayList<Country> lsCountry = new ArrayList<>(3);
+            favoritosDB.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot favoritos) {
+                    ArrayList<Country> lsCountry = new ArrayList<>(3);
 
-                lsCountry.add(null);
-                lsCountry.add(null);
-                lsCountry.add(null);
+                    lsCountry.add(null);
+                    lsCountry.add(null);
+                    lsCountry.add(null);
 
-                for (DataSnapshot favorito: favoritos.getChildren()) {
-                    if(favorito!=null && favorito.getKey()!=null){
-                        int favPosition = Integer.parseInt(favorito.getKey().split("_")[1]);
-                        Country varCountry = favorito.getValue(Country.class);
-                        lsCountry.remove(favPosition);
-                        lsCountry.add(favPosition, varCountry);
+                    for (DataSnapshot favorito: favoritos.getChildren()) {
+                        if(favorito!=null && favorito.getKey()!=null){
+                            int favPosition = Integer.parseInt(favorito.getKey().split("_")[1]);
+                            Country varCountry = favorito.getValue(Country.class);
+                            lsCountry.remove(favPosition);
+                            lsCountry.add(favPosition, varCountry);
+                        }
                     }
+                    FirebaseHelper.initHelper(lsCountry);
+                    goToFirstPage();
                 }
-                FirebaseHelper.initHelper(lsCountry);
-                goToFirstPage();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.out.println(databaseError.getMessage());
-                Toast.makeText(getApplicationContext(),"Ha ocurrido un error",Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    System.out.println(databaseError.getMessage());
+                    Toast.makeText(getApplicationContext(),"Ha ocurrido un error",Toast.LENGTH_LONG).show();
+                }
+            });
 
+
+        }
     }
 }
