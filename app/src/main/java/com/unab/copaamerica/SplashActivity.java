@@ -127,7 +127,7 @@ public class SplashActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = prefs.edit();
         String paisesJson = prefs.getString(Cons.SP_COUNTRIES, "");
-        if(paisesJson.equals("")) {
+        if(paisesJson!=null && paisesJson.equals("")) {
             editor.putString(Cons.SP_COUNTRIES, gson.toJson(listaPaises));
         }
         editor.putString(Cons.SP_MATCHS, gson.toJson(listaPartidos));
