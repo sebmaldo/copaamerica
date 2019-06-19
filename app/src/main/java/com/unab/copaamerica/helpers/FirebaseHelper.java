@@ -30,22 +30,6 @@ public class FirebaseHelper {
     }
 
     public static ArrayList<Country> getFirstPlaces(){
-        //TODO: Acá va el código de conexión a Firebase para bajar los 3 primeros lugares.
-        //Ojalá que utilice las preferencias para ir a buscar.
-
-        /*Inicio de la sección de código para tener datos*/
-        /*Esta sección de código es para tener datos, se debe eliminar al tener implementado
-        * firebase, debe en retornar un array list de 3 posiciones.*/
-
-        if(inMemPosition.size()==0){
-            ArrayList<Country> salida = new ArrayList<>();
-            salida.add(null);
-            salida.add(null);
-            salida.add(null);
-            inMemPosition = salida;
-        }
-
-        /*Fin de la sección de código para tener datos*/
 
         return inMemPosition;
 
